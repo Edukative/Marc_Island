@@ -9,12 +9,17 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRB;
     public float speed;
     GameObject focalPoint;
+    GameObject powerupIndicator;
 
     // Start is called before the first frame update
     void Start()
     {
         playerRB = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
+
+        // powerup
+        powerupIndicator = GameObject.Find("PowerupIndicator");
+        powerupIndicator.SetActive(false);
     }
 
     // Update is called once per frame
@@ -25,20 +30,27 @@ public class PlayerController : MonoBehaviour
         // now we need the player to move in the direction of the camera so..."
         playerRB.AddForce(focalPoint.transform.forward * forwardInput * speed * Time.deltaTime);
 
+        // powerup indicator
+        powerupIndicator.transform.position = transform.position;
+        // transform.position is the position of the gameObject that carries this script.
+
     }
 
-   /* IEnumerator PowerupCountdownRoutine()
+    IEnumerator PowerupCountdownRoutine()
     {
-
-
+        yield return new WaitForSeconds(7);
+        hasPowerup = false;
+        powerupIndicator.SetActive(false);
     }
-    */
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Power Up"))
         {
             hasPowerup = true;
             Destroy(other.gameObject);
+            StartCoroutine(PowerupCountdownRoutine());
+            powerupIndicator.SetActive(true);
         }
 
     }

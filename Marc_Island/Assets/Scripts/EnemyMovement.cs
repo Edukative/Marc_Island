@@ -19,5 +19,11 @@ public class EnemyMovement : MonoBehaviour
     {
         Vector3 lookDirection = (player.transform.position - transform.position).normalized;
         enemyRB.AddForce(lookDirection * speed * Time.deltaTime, ForceMode.Impulse);
+
+        // when the enemy falls of form the island
+        if (transform.position.y < -10)
+        {
+            Destroy(gameObject);
+        }
     }
 }
